@@ -8,14 +8,67 @@ function App() {
 	// restore to default state before running selenium tests (or update the test cases if necessary)!
 	const flow: Flow = {
 		start: {
-			message: "Hello! What is your name?",
-			path: "ask_age_group",
+			message: "Hello! Please mention your issue with patient ?",
+			options: ["Anger", "Medicine Side-effect", "Sleep disorder", "Medicine Dificiency"],
+			// path: "ask_age_group1",
+			path: (params: Params) => {
+				if (params.userInput == "Anger") {
+					return "anger_group"
+				} 
+				if (params.userInput == "Medicine Side-effect") {
+					return "med_side_effect";
+				}
+				if (params.userInput == "Sleep disorder") {
+					return "sleep_group";
+				}
+				
+			},
 		},
 		ask_age_group: {
-			message: (params: Params) => `Hey ${params.userInput}! Nice to meet you, what is your age group?`,
+			message: (params: Params) => `You have selected ${params.userInput}.`,			
 			options: ["child", "teen", "adult"],
 			chatDisabled: true,
 			path: () => "ask_math_question",
+		},
+		anger_group: {
+			options: ["Raise Voice", "Throw Things", "hitting and kicking"],	
+			path: (params: Params) => {
+				if (params.userInput == "Raise Voice") {
+					
+					return "Raise_Voice_group"
+				} 
+				if (params.userInput == "Medicine Side-effect") {
+					return "med_side_effect";
+				}
+				if (params.userInput == "Sleep disorder") {
+					return "sleep_group";
+				}
+				
+			},		
+			chatDisabled: true,
+			//path: () => "ask_math_question",
+		},
+		med_side_effect: {
+			options: ["hyper", "more talk", "headeche"],			
+			chatDisabled: true,
+			path: () => "ask_math_question",
+		},
+		sleep_group: {
+			options: ["Excessive sleep", "insomnia", "hypersomnolence"],			
+			chatDisabled: true,
+			path: () => "ask_math_question",
+		},
+		Raise_Voice_group: {
+			message: "1. Give Space to fellow patient        2. Do not argue with fellow patient",
+			//3. Give enough time to settle 4. Find the cause 5. Consult with Doctor
+			
+			options: ["Main menu"],	
+			path: (params: Params) => {
+				if (params.userInput == "Main menu") {
+					
+					return "start"
+				} 
+			}
 		},
 		ask_math_question: {
 			message: (params: Params) => {
